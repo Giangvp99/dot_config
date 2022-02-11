@@ -1,8 +1,3 @@
--- Signals:
--- daemon::fs
---   fs (string)
---
-
 local awful = require("awful")
 local gears = require("gears")
 -- ========================================
@@ -10,19 +5,19 @@ local gears = require("gears")
 -- ========================================
 
 -- update interval
-local update_interval = 3
+local update_interval = 2
 
 -- script to get current ibus engine
-local speed_script = "python ~/.config/scripts/speednet.py | awk '{print}'"
+local cpu_script = "python ~/.config/scripts/cpu.py | awk '{print}'"
 
 -- ========================================
 -- Logic
 -- ========================================
 
 -- Main script
-local emit_speednet = function()
-	awful.spawn.easy_async_with_shell(speed_script, function(stdout)
-		awesome.emit_signal("daemon::speednet", stdout)
+local emit_cpu = function()
+	awful.spawn.easy_async_with_shell(cpu_script, function(stdout)
+		awesome.emit_signal("daemon::cpu", stdout)
 	end)
 end
 
@@ -35,5 +30,5 @@ gears.timer({
 	timeout = update_interval,
 	autostart = true,
 	call_now = true,
-	callback = emit_speednet,
+	callback = emit_cpu,
 })

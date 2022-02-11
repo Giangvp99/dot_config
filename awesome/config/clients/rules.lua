@@ -82,7 +82,6 @@ local rules = {
 		},
 	},
 
-	-- Fullscreen clients
 	{
 		rule_any = {
 			class = {
