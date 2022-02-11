@@ -1,0 +1,23 @@
+! Remap control to capslock and capslock to shift + capslock
+clear     lock
+clear     control
+clear     mod1
+clear     mod2
+clear     mod3
+clear     mod4
+clear     mod5
+
+keycode      37 = Escape
+keycode      66 = Control_L Caps_Lock NoSymbol NoSymbol
+! keycode     105 = Alt_R Meta_R Alt_R Meta_R
+! keycode     108 = Control_R NoSymbol Control_R
+keycode     133  = Alt_L Meta_L Alt_L Meta_L
+keycode     64   = Super_L NoSymbol Super_L
+add     control = Caps_Lock Control_L Control_R
+add        mod1 = Alt_L Alt_R Meta_L
+! add        mod2 = Tab
+! add        mod3 =
+add        mod4 = Super_L Super_R
+add        mod5 = Mode_switch ISO_Level3_Shift
+! Natrual scroll a-la macOS style
+pointer = 1 2 3 4 5 6 7 8 9 10 11 12
