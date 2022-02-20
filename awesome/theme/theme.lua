@@ -33,6 +33,7 @@ theme.icon_theme = "zafiro-icon-theme"
 -- ========================================
 
 -- Font
+theme.basic_font = font
 theme.font = font .. " 11"
 
 -- Background

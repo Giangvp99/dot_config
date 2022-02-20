@@ -30,13 +30,13 @@ local function move_client(c, direction)
 		-- If maxed layout then swap windows
 	elseif awful.layout.get(mouse.screen) == awful.layout.suit.max then
 		if direction == "up" or direction == "left" then
-			awful.client.swap.byidx(-1, c)
+			awful.client.focus.byidx(-1, c)
 		elseif direction == "down" or direction == "right" then
-			awful.client.swap.byidx(1, c)
+			awful.client.focus.byidx(1, c)
 		end
 		-- Otherwise swap the client in the tiled layout
 	else
-		awful.client.swap.bydirection(direction, c, nil)
+		awful.client.focus.bydirection(direction, c, nil)
 	end
 end
 

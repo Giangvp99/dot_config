@@ -18,7 +18,7 @@ local startup_scripts = {
 	-- "ibus-daemon -drx",
 	"nm-applet",
 	"blueman-applet",
-	"kitty",
+	"alacritty",
 } -- Run all apps listed on start up
 for _, app in ipairs(startup_scripts) do
 	-- Don't spawn startup command if already exists

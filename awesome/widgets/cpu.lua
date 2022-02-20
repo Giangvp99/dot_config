@@ -12,7 +12,7 @@ local set_foreground = require("helpers").set_foreground
 -- update widget
 local update_widget = function(widget, stdout)
 	local cpu = string.match(stdout, "(%d+).?")
-	widget.widget.markup = set_foreground(beautiful.color.darkred, " " .. string.format("%2.1f", cpu))
+	widget.widget.markup = set_foreground(beautiful.color.darkred, " " .. string.format("%4.1f", cpu))
 end
 
 -- create widget instance

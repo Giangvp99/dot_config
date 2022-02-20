@@ -18,9 +18,9 @@ local update_widget = function(widget, used, total)
 	used = tonumber(used) / 1024
 	total = tonumber(total) / 1024
 	widget.widget.markup = string.format(
-		"<span foreground='" .. beautiful.color.lightred .. "'> %.2f %.1f</span>",
-		used,
-		total
+		"<span foreground='" .. beautiful.color.lightred .. "'> %4.2f</span>",
+		used
+		-- total
 	)
 	-- widget.tooltip.text = used .. total
 end

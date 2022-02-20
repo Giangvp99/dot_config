@@ -98,7 +98,7 @@ global.keys = awful.util.table.join(
 	-- ========================================
 	-- Applications
 	-- ========================================
-	awful.key({ modkey }, "`", function()
+	awful.key({ modkey }, ";", function()
 		awesome.emit_signal("floating_terminal::toggle")
 	end, { description = "toggle floating terminal", group = "hotkeys" }),
 

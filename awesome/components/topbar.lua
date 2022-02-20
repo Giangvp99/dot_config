@@ -33,11 +33,11 @@ awful.screen.connect_for_each_screen(function(s)
 			{
 				layout = wibox.layout.fixed.horizontal,
 				require("widgets.taglist")(s),
-				require("widgets.tasklist")(s),
 				require("widgets.updates")(s),
 				require("widgets.cpu")(s),
 				require("widgets.memory")(s),
 				require("widgets.speednet")(s),
+				require("widgets.tasklist")(s),
 			},
 
 			-- Middle widgets
