@@ -4,7 +4,7 @@
 --
 local wibox = require("wibox")
 local beautiful = require("beautiful")
-
+local helpers = require("helpers")
 -- ========================================
 -- Config
 -- ========================================
@@ -16,7 +16,11 @@ local beautiful = require("beautiful")
 -- update widget
 local update_widget = function(widget, updates)
 	updates = updates:match("%d+")
-	widget.widget.markup = "<span foreground='" .. beautiful.color.lightyellow .. "'> " .. updates .. "</span>"
+	if updates == "0" then
+		widget.widget.markup = helpers.set_foreground(beautiful.updates_none_fg, beautiful.updates_none)
+	else
+		widget.widget.markup = helpers.set_foreground(beautiful.updates_normal_fg, beautiful.updates_normal .. updates)
+	end
 	-- widget.tooltip.text = updates .. " updates avaiable!"
 end
 
@@ -27,7 +31,7 @@ local create_widget = function(screen)
 		left = beautiful.clickable_container_padding_x,
 		right = beautiful.clickable_container_padding_x,
 		{
-			markup = "勒",
+			markup = beautiful.widget_loading,
 			widget = wibox.widget.textbox,
 		},
 	})

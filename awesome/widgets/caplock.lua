@@ -1,7 +1,3 @@
---
--- brightness.lua
--- brightness widget
---
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local set_foreground = require("helpers").set_foreground
@@ -14,12 +10,12 @@ local set_foreground = require("helpers").set_foreground
 -- ========================================
 
 -- update widget
-local update_widget = function(widget, stdout)
-	local recv, r, sent, s = string.match(stdout, "(%d+)(%a)%s(%d+)(%a).?")
-	widget.widget.markup = set_foreground(
-		beautiful.speednet_fg,
-		beautiful.speednet_icon .. string.format("%3d", recv) .. r .. " " .. string.format("%3d", sent) .. s
-	)
+local update_widget = function(widget, status)
+	if status == "on" then
+		widget.widget.markup = set_foreground(beautiful.capslock_on_fg, beautiful.capslock_icon)
+	else
+		widget.widget.markup = set_foreground(beautiful.capslock_off_fg, beautiful.capslock_icon)
+	end
 end
 
 -- create widget instance
@@ -29,11 +25,12 @@ local create_widget = function(screen)
 		left = beautiful.clickable_container_padding_x,
 		right = beautiful.clickable_container_padding_x,
 		{
-			markup =beautiful.widget_loading,
+			markup = beautiful.widget_loading,
+			font = beautiful.capslock_font,
 			widget = wibox.widget.textbox,
 		},
 	})
-	awesome.connect_signal("daemon::speednet", function(...)
+	awesome.connect_signal("daemon::caplock", function(...)
 		update_widget(widget, ...)
 	end)
 

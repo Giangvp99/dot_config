@@ -30,7 +30,7 @@ end
 
 -- update language
 local update_language = function(widget, language)
-	widget.markup = "<span foreground='" .. beautiful.color.lightpurple .. "'> " .. language .. "</span>"
+	widget.markup = helpers.set_foreground(beautiful.language_fg, beautiful.language_icon .. language)
 
 	-- widget.tooltip.text = language == "unknown" and "Keyboard layout unknown"
 	-- or "Keyboard layout is set to " .. language
@@ -39,7 +39,7 @@ end
 -- create widget instance
 local create_widget = function(screen)
 	local widget = wibox.widget({
-		markup = "",
+		markup = beautiful.widget_loading,
 		widget = wibox.widget.textbox,
 	})
 	awesome.connect_signal("daemon::language", function(...)

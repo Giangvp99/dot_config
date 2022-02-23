@@ -12,12 +12,12 @@ local update_widget = function(widget, tag)
 	local layout_name = tag.layout.name
 	local icon_name = ""
 	if layout_name == "max" then
-		icon_name = icon_name .. " "
+		icon_name = icon_name .. beautiful.layout_max
 	elseif layout_name == "tile" then
-		icon_name = icon_name .. " "
+		icon_name = icon_name .. beautiful.layout_tile
 	end
 
-	widget.widget.markup = helpers.set_foreground(beautiful.color.white, icon_name)
+	widget.widget.markup = helpers.set_foreground(beautiful.layout_fg, icon_name)
 	-- widget.tooltip.text = layout.name
 end
 
@@ -30,7 +30,7 @@ local create_widget = function(screen)
 		top = beautiful.clickable_container_padding_y,
 		bottom = beautiful.clickable_container_padding_y,
 		{
-			markup = "勒",
+			markup = beautiful.widget_loading,
 			widget = wibox.widget.textbox,
 			font = beautiful.basic_font .. " 14",
 			resize = true,

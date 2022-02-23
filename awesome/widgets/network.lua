@@ -30,7 +30,7 @@ end
 local update_wireless_status = function(widget, interface, healthy, essid, bitrate, strength)
 	local status = healthy and "Connected to internet" or "Connected but no internet!"
 
-	widget.markup = set_foreground(beautiful.color.lightaqua, essid)
+	widget.markup = set_foreground(beautiful.network_fg, beautiful.network_icon .. essid)
 	widget.tooltip.markup = string.format(
 		"<b>%s</b>"
 			.. "\nESSID: <b>%s</b>"
@@ -69,7 +69,7 @@ end
 -- create widget instance
 local create_widget = function(screen)
 	local widget = wibox.widget({
-		markup = "勒",
+		markup = beautiful.widget_loading,
 		widget = wibox.widget.textbox,
 	})
 

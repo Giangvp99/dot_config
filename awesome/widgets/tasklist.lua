@@ -6,48 +6,20 @@
 local awful = require("awful")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
-local color = require("theme.color")
-local naughty = require("naughty")
--- Old tasklist
--- get minimized clients
--- local get_minimized_clients = function(screen)
--- 	local clients = {}
---
--- 	for _, c in ipairs(screen.hidden_clients) do
--- 		if
--- 			not (c.skip_taskbar or c.hidden or c.type == "splash" or c.type == "dock" or c.type == "desktop")
--- 			and c.minimized
--- 			and awful.widget.tasklist.filter.currenttags(c, awful.screen.focused())
--- 		then
--- 			table.insert(clients, c)
--- 		end
--- 	end
---
--- 	return #clients
--- end
--- get hidden/visible client counts
--- local get_clients_status = function(screen)
--- 	local visible_clients = #screen.clients
--- 	local hidden_clients = get_minimized_clients(screen)
---
--- 	return string.format(
--- 		"<span foreground='" .. color.darkblue .. "'>%s%s</span> <span foreground='" .. color.black2 .. "'>%s%s</span>",
--- 		beautiful.tasklist_icon_visible,
--- 		visible_clients,
--- 		beautiful.tasklist_icon_hidden,
--- 		hidden_clients
--- 	)
--- end
--- New tasklist
+local helpers = require("helpers")
+
+local normal_client = helpers.set_foreground(beautiful.tasklist_fg_normal, beautiful.tasklist_normal)
+local focus_client = helpers.set_foreground(beautiful.tasklist_fg_focus, beautiful.tasklist_normal)
+local minimized_client = helpers.set_foreground(beautiful.tasklist_fg_minimized, beautiful.tasklist_normal)
+local floating_client = helpers.set_foreground(beautiful.tasklist_fg_floating, beautiful.tasklist_floating)
+local ontop_client = helpers.set_foreground(beautiful.tasklist_fg_floating, beautiful.tasklist_ontop)
+local maximized_client = helpers.set_foreground(beautiful.tasklist_fg_floating, beautiful.tasklist_maximized)
 local compare = function(a, b)
 	return a.window < b.window
 end
 local get_clients_status = function(screen)
 	local res = ""
-	local visible_client = "<span foreground='" .. color.black2 .. "'> </span>"
-	local current_client = "<span foreground='" .. color.lightorange .. "'> </span>"
-	local minimized_client = "<span foreground='" .. color.black1 .. "'> </span>"
-	local floating_client = "<span foreground='" .. color.lightorange .. "'> </span>"
+
 	local current_c = client.focus or { window = -1 }
 	local clients = {}
 	for _, c in ipairs(screen.clients) do
@@ -68,12 +40,16 @@ local get_clients_status = function(screen)
 	for _, c in ipairs(clients) do
 		if c.floating == true then
 			res = res .. floating_client
+		elseif c.ontop == true then
+			res = res .. ontop_client
 		elseif c.minimized == true then
 			res = res .. minimized_client
+		elseif c.maximized == true then
+			res = res .. maximized_client
 		elseif c.window == current_c.window then
-			res = res .. current_client
+			res = res .. focus_client
 		else
-			res = res .. visible_client
+			res = res .. normal_client
 		end
 	end
 	return res
@@ -90,10 +66,10 @@ local create_widget = function(screen)
 		left = beautiful.clickable_container_padding_x,
 		right = beautiful.clickable_container_padding_x,
 		{
-			valign = "center",
-			align = "center",
-			markup = "勒",
-			font = beautiful.basic_font .. 9,
+			-- valign = "center",
+			-- align = "center",
+			markup = beautiful.widget_loading,
+			font = beautiful.tasklist_font,
 			widget = wibox.widget.textbox,
 		},
 	})
@@ -114,6 +90,12 @@ local create_widget = function(screen)
 		update_widget(widget, screen)
 	end)
 	client.connect_signal("property::floating", function()
+		update_widget(widget, screen)
+	end)
+	client.connect_signal("property::maximized", function()
+		update_widget(widget, screen)
+	end)
+	client.connect_signal("property::ontop", function()
 		update_widget(widget, screen)
 	end)
 	awful.tag.attached_connect_signal(s, "property::selected", function()

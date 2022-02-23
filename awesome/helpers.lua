@@ -191,6 +191,16 @@ helpers.switch_language = function()
 	end)
 end
 
+--switch caplock
+helpers.switch_caplock = function()
+	local caplock_script = "bash -c 'sleep 0.2 && xset q'"
+	awful.spawn.easy_async_with_shell(caplock_script, function(stdout)
+		if stdout:match("Caps Lock") then
+			local status = stdout:gsub(".*(Caps Lock:%s+)(%a+).*", "%2")
+			awesome.emit_signal("daemon::caplock", status)
+		end
+	end)
+end
 -- set foreground widget
 helpers.set_foreground = function(color, content)
 	return "<span foreground='" .. color .. "'>" .. content .. "</span>"

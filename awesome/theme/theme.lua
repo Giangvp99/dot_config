@@ -125,6 +125,8 @@ theme.window_switcher_icon_width = dpi(15)
 -- Widgets
 -- ========================================
 
+theme.widget_loading = "勒"
+
 -- Clickable container
 theme.clickable_container_padding_x = dpi(10)
 theme.clickable_container_padding_y = dpi(7)
@@ -135,29 +137,29 @@ theme.systray_icon_spacing = dpi(10)
 -- Taglist
 theme.taglist_spacing = dpi(5)
 theme.taglist_font = font .. " 10"
-theme.taglist_bg_empty = theme.bg_normal
-theme.taglist_bg_occupied = theme.bg_normal
-theme.taglist_bg_urgent = theme.bg_normal
-theme.taglist_bg_focus = theme.bg_normal
+theme.taglist_fg_empty = color.black2
+theme.taglist_fg_occupied = color.white2
+theme.taglist_fg_urgent = color.lightred
+theme.taglist_fg_focus = color.lightaqua
 
-theme.taglist_fg_empty = theme.fg_normal
-theme.taglist_fg_occupied = theme.fg_normal
-theme.taglist_fg_urgent = theme.fg_urgent
-theme.taglist_fg_focus = theme.fg_focus
-
+theme.taglist_focus = " "
+theme.taglist_empty = " "
+theme.taglist_hidden = " "
 -- Tasklist
-theme.tasklist_font = theme.font
+theme.tasklist_font = theme.font .. " 11"
 
 theme.tasklist_icon_visible = " "
 theme.tasklist_icon_hidden = " "
 
-theme.tasklist_bg_normal = theme.bg_normal
-theme.tasklist_bg_focus = theme.bg_focus
-theme.tasklist_bg_urgent = theme.bg_urgent
-theme.tasklist_fg_normal = theme.fg_normal
-theme.tasklist_fg_focus = theme.fg_focus
-theme.tasklist_fg_urgent = theme.fg_urgent
+theme.tasklist_fg_normal = color.black2
+theme.tasklist_fg_focus = color.lightorange
+theme.tasklist_fg_minimized = color.black1
+theme.tasklist_fg_floating = color.lightorange
 
+theme.tasklist_normal = " "
+theme.tasklist_ontop = " "
+theme.tasklist_floating = "柳 "
+theme.tasklist_maximized = " "
 -- Calendar
 theme.calendar_padding = dpi(20)
 theme.calendar_spacing = dpi(10)
@@ -167,13 +169,80 @@ theme.bg_systray = theme.bg_normal
 theme.systray_icon_spacing = dpi(5)
 
 -- Battery
-theme.battery_fg_normal = theme.fg_normal
-theme.battery_fg_urgent = theme.fg_urgent
+theme.battery_error = ""
+theme.battery_plugged = " "
+theme.battery_full = ""
+theme.battery_charging_90 = " "
+theme.battery_charging_80 = " "
+theme.battery_charging_60 = " "
+theme.battery_charging_40 = " "
+theme.battery_charging_30 = " "
+theme.battery_discharging_80 = " "
+theme.battery_discharging_60 = " "
+theme.battery_discharging_40 = " "
+theme.battery_discharging_20 = " "
+theme.battery_discharging_xx = " "
+theme.battery_fg_error = color.darkred
+theme.battery_fg_unknown = color.lightgreen
+theme.battery_fg_charging = color.darkgreen
+theme.battery_fg_full = color.darkaqua
+theme.battery_fg_discharging = color.darkyellow
 
 -- Layout
-theme.layout_tile = theme.icons_path .. "layouts/tiled.png"
-theme.layout_floating = theme.icons_path .. "layouts/floating.png"
-theme.layout_max = theme.icons_path .. "layouts/maximized.png"
+theme.layout_fg = color.white1
+theme.layout_max = " "
+theme.layout_tile = " "
+
+-- Memory
+theme.memory_fg = color.lightred
+theme.memory_icon = " "
+
+-- Network
+theme.network_fg = color.lightaqua
+theme.network_icon = " "
+
+-- Capslock
+theme.capslock_font = font .. " 14"
+theme.capslock_icon = ""
+theme.capslock_off_fg = color.black2
+theme.capslock_on_fg = color.white1
+-- Speednet
+theme.speednet_fg = color.darkyellow
+theme.speednet_icon = "龍 "
+
+-- Brightness
+theme.brightness_xx = " "
+theme.brightness_30 = " "
+theme.brightness_60 = " "
+theme.brightness_fg = color.lightorange
+
+-- Cpu
+theme.cpu_fg = color.darkred
+theme.cpu_icon = " "
+
+-- Filesystem
+theme.fs_home = " "
+theme.fs_home_fg = color.lightgreen
+theme.fs_root = " "
+theme.fs_root_fg = color.darkgreen
+
+-- Language
+theme.language_icon = " "
+theme.language_fg = color.lightpurple
+
+-- Updates
+theme.updates_normal = " "
+theme.updates_none = " "
+theme.updates_normal_fg = color.lightyellow
+theme.updates_none_fg = color.lightaqua
+
+-- Volume
+theme.volume_fg = color.lightblue
+theme.volume_xx = "奄 "
+theme.volume_15 = "奔 "
+theme.volume_50 = "墳 "
+theme.volume_80 = " "
+theme.volume_mute = "婢 "
 
 -- Hotkeys
 theme.hotkeys_font = font .. " Bold 10"

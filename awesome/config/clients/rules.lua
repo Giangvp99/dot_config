@@ -60,6 +60,7 @@ local rules = {
 				"Pavucontrol",
 				"plasmashell",
 				"Plasma",
+				"Nm-connection-editor",
 			},
 			name = {
 				"Bluetooth Devices",

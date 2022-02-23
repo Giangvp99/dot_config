@@ -10,7 +10,6 @@ pcall(require, "luarocks.loader")
 
 Apps = require("config.basics").Apps
 
-require("startup")
 require("theme")
 require("layout")
 require("config.clients")
@@ -22,6 +21,7 @@ root.buttons(keys.desktopbuttons)
 require("daemons")
 require("notifications")
 require("components")
+require("startup")
 -- Reload config when screen geometry change
 screen.connect_signal("property::geometry", awesome.restart)
 

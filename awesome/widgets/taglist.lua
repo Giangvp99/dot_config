@@ -6,26 +6,25 @@
 local awful = require("awful")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
-local color = require("theme.color")
-
+local set_fg = require("helpers").set_foreground
 -- determine icon to show for each tag
 local update_tag_icon = function(widget, tag)
 	local icon = nil
 	if #tag:clients() > 0 then
 		if tag.selected then
-			icon = "<span foreground='" .. color.lightaqua .. "'> </span>"
+			icon = set_fg(beautiful.taglist_fg_focus, beautiful.taglist_focus)
 		elseif tag.urgent then
-			icon = "<span foreground='" .. color.lightred .. "'> </span>"
+			icon = set_fg(beautiful.taglist_fg_urgent, beautiful.taglist_hidden)
 		else
-			icon = "<span foreground='" .. color.white2 .. "'> </span>"
+			icon = set_fg(beautiful.taglist_fg_occupied, beautiful.taglist_hidden)
 		end
 	else --empty
 		if tag.selected then
-			icon = "<span foreground='" .. color.lightaqua .. "'> </span>"
+			icon = set_fg(beautiful.taglist_fg_focus, beautiful.taglist_focus)
 		elseif tag.urgent then
-			icon = "<span foreground='" .. color.lightred .. "'> </span>"
+			icon = set_fg(beautiful.taglist_fg_urgent, beautiful.taglist_empty)
 		else
-			icon = "<span foreground='" .. color.black2 .. "'> </span>"
+			icon = set_fg(beautiful.taglist_fg_empty, beautiful.taglist_empty)
 		end
 	end
 

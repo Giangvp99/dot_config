@@ -17,14 +17,14 @@ local set_foreground = require("helpers").set_foreground
 local update_widget = function(widget, percentage)
 	local icon = nil
 	if percentage <= 30 then
-		icon = " "
+		icon = beautiful.brightness_xx
 	elseif percentage > 30 and percentage <= 60 then
-		icon = " "
+		icon = beautiful.brightness_30
 	elseif percentage > 60 then
-		icon = " "
+		icon = beautiful.brightness_60
 	end
 
-	widget.widget.markup = set_foreground(beautiful.color.lightorange, icon .. percentage)
+	widget.widget.markup = set_foreground(beautiful.brightness_fg, icon .. percentage)
 	-- widget.tooltip.text = string.format("Brightness is at %s%%", percentage)
 end
 
@@ -35,7 +35,7 @@ local create_widget = function(screen)
 		left = beautiful.clickable_container_padding_x,
 		right = beautiful.clickable_container_padding_x,
 		{
-			markup = "勒",
+			markup = beautiful.widget_loading,
 			widget = wibox.widget.textbox,
 		},
 	})

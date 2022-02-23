@@ -14,7 +14,7 @@ local gears = require("gears")
 local update_interval = 3600
 
 -- script to get current ibus engine
-local home_fs_script = "df -h /home | grep '^/' | awk '{print $3,$2}'"
+local home_fs_script = "df -h /home/giangvp99/ | grep '^/' | awk '{print $3,$2}'"
 local root_fs_script = "df -h / | grep '^/' | awk '{print $3,$2}'"
 
 -- ========================================

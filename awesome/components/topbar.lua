@@ -33,11 +33,9 @@ awful.screen.connect_for_each_screen(function(s)
 			{
 				layout = wibox.layout.fixed.horizontal,
 				require("widgets.taglist")(s),
-				require("widgets.updates")(s),
-				require("widgets.cpu")(s),
-				require("widgets.memory")(s),
+				require("widgets.fs")(s),
+				require("widgets.network")(s),
 				require("widgets.speednet")(s),
-				require("widgets.tasklist")(s),
 			},
 
 			-- Middle widgets
@@ -50,9 +48,12 @@ awful.screen.connect_for_each_screen(function(s)
 			{
 				layout = wibox.layout.fixed.horizontal,
 				require("widgets.systray")(s),
-				require("widgets.network")(s),
-				require("widgets.fs")(s),
+				require("widgets.tasklist")(s),
+				require("widgets.updates")(s),
+				require("widgets.memory")(s),
+				require("widgets.cpu")(s),
 				require("widgets.volume")(s),
+				require("widgets.caplock")(s),
 				require("widgets.language")(s),
 				require("widgets.brightness")(s),
 				require("widgets.battery")(s),

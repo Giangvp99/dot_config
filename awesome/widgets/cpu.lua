@@ -12,7 +12,7 @@ local set_foreground = require("helpers").set_foreground
 -- update widget
 local update_widget = function(widget, stdout)
 	local cpu = string.match(stdout, "(%d+).?")
-	widget.widget.markup = set_foreground(beautiful.color.darkred, " " .. string.format("%4.1f", cpu))
+	widget.widget.markup = set_foreground(beautiful.cpu_fg, beautiful.cpu_icon .. string.format("%02.0f", cpu))
 end
 
 -- create widget instance
@@ -22,7 +22,7 @@ local create_widget = function(screen)
 		left = beautiful.clickable_container_padding_x,
 		right = beautiful.clickable_container_padding_x,
 		{
-			markup = "勒",
+			markup = beautiful.widget_loading,
 			widget = wibox.widget.textbox,
 		},
 	})

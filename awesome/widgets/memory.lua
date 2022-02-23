@@ -4,7 +4,7 @@
 --
 local wibox = require("wibox")
 local beautiful = require("beautiful")
-
+local helpers = require("helpers")
 -- ========================================
 -- Config
 -- ========================================
@@ -17,10 +17,9 @@ local beautiful = require("beautiful")
 local update_widget = function(widget, used, total)
 	used = tonumber(used) / 1024
 	total = tonumber(total) / 1024
-	widget.widget.markup = string.format(
-		"<span foreground='" .. beautiful.color.lightred .. "'> %4.2f</span>",
-		used
-		-- total
+	widget.widget.markup = helpers.set_foreground(
+		beautiful.memory_fg,
+		string.format(beautiful.memory_icon .. "%02.0f", used / total * 100)
 	)
 	-- widget.tooltip.text = used .. total
 end
@@ -32,7 +31,7 @@ local create_widget = function(screen)
 		left = beautiful.clickable_container_padding_x,
 		right = beautiful.clickable_container_padding_x,
 		{
-			markup = "勒",
+			markup = beautiful.widget_loading,
 			widget = wibox.widget.textbox,
 		},
 	})

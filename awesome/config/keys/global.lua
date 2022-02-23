@@ -19,13 +19,6 @@ local ctrlkey = keys.ctrlkey --resize, layout
 local shiftkey = keys.shiftkey --swap
 local leftclick = keys.leftclick
 
--- Raise focus client
-local function raise_client()
-	if client.focus then
-		client.focus:raise()
-	end
-end
-
 local global = {}
 
 -- Mouse buttons on desktop
@@ -185,6 +178,7 @@ global.keys = awful.util.table.join(
 	end, { description = "brightness down", group = "hotkeys" }),
 
 	-- Volume/Playback
+	awful.key({ shiftkey }, "Control_L", helpers.switch_caplock, { description = "switch caplock", group = "hotkeys" }),
 	awful.key({}, "XF86AudioRaiseVolume", function()
 		helpers.change_volume(5)
 	end, { description = "volume up", group = "hotkeys" }),

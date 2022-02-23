@@ -19,6 +19,7 @@ local startup_scripts = {
 	"nm-applet",
 	"blueman-applet",
 	"alacritty",
+	"gtk-launch safeeyes ; sleep 0.5 ; exit",
 } -- Run all apps listed on start up
 for _, app in ipairs(startup_scripts) do
 	-- Don't spawn startup command if already exists

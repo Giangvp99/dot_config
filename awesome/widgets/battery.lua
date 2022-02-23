@@ -3,12 +3,9 @@
 -- battery status widget
 --
 
-local awful = require("awful")
 local wibox = require("wibox")
-local gears = require("gears")
 local beautiful = require("beautiful")
 local set_foreground = require("helpers").set_foreground
-local keys = require("config.keys.map")
 
 -- ========================================
 -- Config
@@ -19,52 +16,46 @@ local keys = require("config.keys.map")
 -- ========================================
 
 -- define buttons
-local buttons = function(screen)
-	return gears.table.join(awful.button({}, keys.leftclick, function()
-		awful.spawn(Apps.power_manager)
-	end))
-end
-
 -- get battery
 local get_battery = function(percentage, status, time)
 	local icon = ""
 	if percentage == nil then
-		return set_foreground(beautiful.color.darkred, "")
+		return set_foreground(beautiful.battery_fg_error, beautiful.battery_error)
 	end
 	local rounded = math.ceil(percentage / 10) * 10
 	if status == "Unknown" then
-		icon = " "
-		return set_foreground(beautiful.color.lightgreen, icon)
+		icon = beautiful.battery_plugged
+		return set_foreground(beautiful.battery_fg_unknown, icon)
 	elseif status == "Charging" then
 		if rounded >= 90 then
-			icon = " "
+			icon = beautiful.battery_charging_90
 		elseif rounded >= 80 then
-			icon = " "
+			icon = beautiful.battery_charging_80
 		elseif rounded >= 60 then
-			icon = " "
+			icon = beautiful.battery_charging_60
 		elseif rounded >= 40 then
-			icon = " "
+			icon = beautiful.battery_charging_40
 		elseif rounded >= 30 then
-			icon = " "
+			icon = beautiful.battery_charging_30
 		else
-			icon = " "
+			icon = beautiful.battery_charging_xx
 		end
-		return set_foreground(beautiful.color.darkgreen, icon .. string.format("%.0f ", percentage) .. time)
+		return set_foreground(beautiful.battery_fg_charging, icon .. string.format("%.0f ", percentage) .. time)
 	elseif status == "Full" then
-		return set_foreground(beautiful.color.darkaqua, "")
+		return set_foreground(beautiful.battery_fg_full, beautiful.battery_full)
 	else
 		if rounded >= 80 then
-			icon = " "
+			icon = beautiful.battery_discharging_80
 		elseif rounded >= 60 then
-			icon = " "
+			icon = beautiful.battery_discharging_60
 		elseif rounded >= 40 then
-			icon = " "
+			icon = beautiful.battery_discharging_40
 		elseif rounded >= 20 then
-			icon = " "
+			icon = beautiful.battery_discharging_20
 		else
-			icon = " "
+			icon = beautiful.battery_discharging_xx
 		end
-		return set_foreground(beautiful.color.darkyellow, icon .. string.format("%.0f ", percentage) .. time)
+		return set_foreground(beautiful.battery_fg_discharging, icon .. string.format("%.0f ", percentage) .. time)
 	end
 end
 
@@ -81,7 +72,7 @@ local create_widget = function(screen)
 		left = beautiful.clickable_container_padding_x,
 		right = beautiful.clickable_container_padding_x,
 		{
-			markup = "勒",
+			markup = beautiful.widget_loading,
 			widget = wibox.widget.textbox,
 		},
 	})

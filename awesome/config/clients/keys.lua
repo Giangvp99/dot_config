@@ -79,34 +79,30 @@ local clientkeys = awful.util.table.join(
 	-- ========================================
 	-- Client Keybindings
 	-- ========================================
-	awful.key({ modkey, shiftkey }, "j", function(c)
+	awful.key({ modkey }, "j", function(c)
 		move_client(c, "down")
 	end, { description = "move down", group = "client" }),
 
-	awful.key({ modkey, shiftkey }, "k", function(c)
+	awful.key({ modkey }, "k", function(c)
 		move_client(c, "up")
 	end, { description = "move up", group = "client" }),
 
-	awful.key({ modkey, shiftkey }, "h", function(c)
+	awful.key({ modkey }, "h", function(c)
 		move_client(c, "left")
 	end, { description = "move left", group = "client" }),
 
-	awful.key({ modkey, shiftkey }, "l", function(c)
+	awful.key({ modkey }, "l", function(c)
 		move_client(c, "right")
 	end, { description = "move right", group = "client" }),
 
-	awful.key({ modkey }, "f", function(c)
+	awful.key({ modkey, shiftkey }, "f", function(c)
 		c.fullscreen = not c.fullscreen
 		c:raise()
 	end, { description = "toggle fullscreen", group = "client" }),
 
-	awful.key({ modkey }, "t", function(c)
+	awful.key({ modkey }, "o", function(c)
 		c.ontop = not c.ontop
 	end, { description = "toggle keep on top", group = "client" }),
-
-	awful.key({ modkey, shiftkey }, "c", function(c)
-		c:kill()
-	end, { description = "close", group = "client" }),
 
 	awful.key({ modkey }, "q", function(c)
 		c:kill()
@@ -121,36 +117,7 @@ local clientkeys = awful.util.table.join(
 		c:raise()
 	end, { description = "(un)maximize", group = "client" }),
 
-	awful.key(
-		{ modkey, ctrlkey },
-		"f",
-		awful.client.floating.toggle,
-		{ description = "toggle floating", group = "client" }
-	),
-	awful.key({ modkey }, "j", function()
-		if awful.layout.get(mouse.screen) == awful.layout.suit.max then
-			awful.client.focus.history.previous()
-		else
-			awful.client.focus.bydirection("down")
-		end
-
-		raise_client()
-	end, { description = "focus down", group = "client" }),
-
-	awful.key({ modkey }, "k", function()
-		awful.client.focus.bydirection("up")
-		raise_client()
-	end, { description = "focus up", group = "client" }),
-
-	awful.key({ modkey }, "h", function()
-		awful.client.focus.bydirection("left")
-		raise_client()
-	end, { description = "focus left", group = "client" }),
-
-	awful.key({ modkey }, "l", function()
-		awful.client.focus.bydirection("right")
-		raise_client()
-	end, { description = "focus right", group = "client" }),
+	awful.key({ modkey }, "f", awful.client.floating.toggle, { description = "toggle floating", group = "client" }),
 
 	-- ========================================
 	-- Client resize

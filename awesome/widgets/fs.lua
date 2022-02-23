@@ -4,6 +4,8 @@
 --
 local wibox = require("wibox")
 local beautiful = require("beautiful")
+local set_fg = require("helpers").set_foreground
+
 -- ========================================
 -- Config
 -- ========================================
@@ -16,16 +18,8 @@ local beautiful = require("beautiful")
 local update_widget = function(widget, home_fs, root_fs)
 	home_fs = home_fs:gsub("\n[^\n]*$", " ")
 	root_fs = root_fs:gsub("\n[^\n]*$", " ")
-	widget.widget.markup = "<span foreground='"
-		.. beautiful.color.lightgreen
-		.. "'> "
-		.. home_fs
-		.. "</span><span foreground='"
-		.. beautiful.color.darkgreen
-		.. "'> "
-		.. root_fs
-		.. "</span>"
-	-- widget.tooltip.text = home_fs .. root_fs
+	widget.widget.markup = set_fg(beautiful.fs_home_fg, beautiful.fs_home .. home_fs)
+		.. set_fg(beautiful.fs_root_fg, beautiful.fs_root .. root_fs)
 end
 
 -- create widget instance
@@ -35,7 +29,7 @@ local create_widget = function(screen)
 		left = beautiful.clickable_container_padding_x,
 		right = beautiful.clickable_container_padding_x,
 		{
-			markup = "勒",
+			markup = beautiful.widget_loading,
 			widget = wibox.widget.textbox,
 		},
 	})
