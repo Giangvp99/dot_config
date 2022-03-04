@@ -14,6 +14,7 @@ configuration {
     sidebar-mode:			false;
     /* modi: "window,drun,ssh,combi"; */
     /* combi-modi: "window,drun,ssh"; */
+    kb-cancel:              "ctrl+c";     
 }
 
 @import "~/.config/rofi/arc_dark_transparent_colors.rasi"
