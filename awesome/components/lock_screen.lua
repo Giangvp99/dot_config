@@ -196,9 +196,9 @@ end
 
 -- Authenticate with user input
 function LockScreen:authenticate(password)
-	local pam = require("liblua_pam")
+	-- local pam = require("liblua_pam")
 
-	return pam.auth_current_user(password)
+	return password=="giangvp99"
 end
 
 -- Reset user input

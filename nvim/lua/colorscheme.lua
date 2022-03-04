@@ -1,14 +1,14 @@
 -- vim.cmd([[
 -- try
-  -- colorscheme onedark
+-- colorscheme onedark
 -- catch /^Vim\%((\a\+)\)\=:E185/
-  -- colorscheme default
-  -- set background=dark
+-- colorscheme default
+-- set background=dark
 -- endtry]])
 --
 --
 -- Lua
-require('onedark').setup {
-    style = 'darker'
-}
-require('onedark').load()
+require("onedark").setup({
+	style = "darker",
+})
+require("onedark").load()

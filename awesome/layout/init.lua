@@ -14,7 +14,7 @@ Tags = {
 	{ name = "web", layout = awful.layout.layouts[1] },
 	{ name = "code", layout = awful.layout.layouts[2] },
 	{ name = "media", layout = awful.layout.layouts[1] },
-	{ name = "chat", layout = awful.layout.layouts[1] },
+	-- { name = "chat", layout = awful.layout.layouts[1] },
 }
 
 -- ========================================

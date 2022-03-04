@@ -1,7 +1,7 @@
 require("plugins.impatient")
 require("plugins.nvimtree")
 require("plugins.treesitter")
-require("plugins.colorizer")
+require("plugins.color")
 require("plugins.bufferline")
 require("plugins.lualine_nvim")
 require("plugins.gps")

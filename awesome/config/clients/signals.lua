@@ -21,7 +21,7 @@ end)
 
 -- Set border color of focused client
 client.connect_signal("focus", function(c)
-	if c.class ~= "kitty" and c.class ~= "Alacritty" then
+	if c.class ~= "Code" and c.class ~= "Alacritty" then
 		c.border_color = beautiful.border_focus
 	else
 		c.border_color = beautiful.border_normal

@@ -51,7 +51,7 @@ local update_wired_status = function(widget, interface, healthy)
 
 	local icon_name = healthy and "wired" or "wired-alert"
 
-	widget.image = icons_path .. icon_name .. ".svg"
+	-- widget.image = icons_path .. icon_name .. ".svg"
 	widget.tooltip.markup = string.format("<b>%s</b>" .. "\nInterface: <b>%s</b>", status, interface)
 end
 
