@@ -1,23 +1,9 @@
---
--- volume.lua
--- volume widget
---
-
 local awful = require("awful")
-local wibox = require("wibox")
 local gears = require("gears")
 local beautiful = require("beautiful")
 
 local helpers = require("helpers")
 local keys = require("config.keys.map")
-
--- ========================================
--- Config
--- ========================================
-
--- ========================================
--- Definition
--- ========================================
 
 -- define buttons
 local buttons = function(screen)
@@ -49,33 +35,28 @@ local update_widget_percentage = function(widget, percentage)
 	elseif percentage > 80 then
 		icon = icon .. beautiful.volume_80
 	end
-	widget.markup = helpers.set_foreground(beautiful.volume_fg, icon .. percentage)
+	helpers.update_widget(widget).markup = helpers.set_foreground(beautiful.volume_fg, icon .. percentage)
 end
 
 -- update widget mute
 local update_widget_mute = function(widget)
-	widget.markup = beautiful.volume_mute
-	-- widget.tooltip.text = "Volume is muted"
+	helpers.update_widget(widget).markup = beautiful.volume_mute
 end
 
 -- create widget instance
 local create_widget = function(screen)
-	local widget = wibox.widget({
-		markup = beautiful.widget_loading,
-		widget = wibox.widget.textbox,
-	})
+	local widget = helpers.create_widget()
+
 	awesome.connect_signal("daemon::volume::percentage", function(...)
 		update_widget_percentage(widget, ...)
 	end)
+
 	awesome.connect_signal("daemon::volume::muted", function()
 		update_widget_mute(widget)
 	end)
 
 	local container = require("widgets.clickable_container")(widget)
 	container:buttons(buttons(screen))
-
-	-- widget.tooltip = require("widgets.tooltip")({ container })
-	-- widget.tooltip.text = "Volume status unknown"
 
 	return container
 end

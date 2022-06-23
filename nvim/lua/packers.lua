@@ -111,7 +111,7 @@ return packer.startup(function(use)
 		"norcalli/nvim-colorizer.lua",
 		"kyazdani42/nvim-web-devicons",
 		-- "christianchiarulli/nvcode-color-schemes.vim",
-		"navarasu/onedark.nvim",
+    'olimorris/onedarkpro.nvim',
 	})
 
 	-- Status Line and Bufferline

@@ -1,8 +1,3 @@
---
--- topbar.lua
--- topbar config
---
-
 local awful = require("awful")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
@@ -29,7 +24,7 @@ awful.screen.connect_for_each_screen(function(s)
 			layout = wibox.layout.align.horizontal,
 			expand = "none",
 
-			-- Left widgets
+			-- Left/Top widgets
 			{
 				layout = wibox.layout.fixed.horizontal,
 				require("widgets.taglist")(s),
@@ -44,7 +39,7 @@ awful.screen.connect_for_each_screen(function(s)
 				require("widgets.calendar")(s),
 			},
 
-			-- Right widgets
+			-- Right/Bottom widgets
 			{
 				layout = wibox.layout.fixed.horizontal,
 				require("widgets.systray")(s),

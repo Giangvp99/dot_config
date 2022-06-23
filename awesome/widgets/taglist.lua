@@ -1,30 +1,26 @@
---
--- taglist.lua
--- taglist component
---
-
 local awful = require("awful")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
-local set_fg = require("helpers").set_foreground
+local helpers = require("helpers")
+
 -- determine icon to show for each tag
 local update_tag_icon = function(widget, tag)
 	local icon = nil
 	if #tag:clients() > 0 then
 		if tag.selected then
-			icon = set_fg(beautiful.taglist_fg_focus, beautiful.taglist_focus)
+			icon = helpers.set_foreground(beautiful.taglist_fg_focus, beautiful.taglist_focus)
 		elseif tag.urgent then
-			icon = set_fg(beautiful.taglist_fg_urgent, beautiful.taglist_hidden)
+			icon = helpers.set_foreground(beautiful.taglist_fg_urgent, beautiful.taglist_hidden)
 		else
-			icon = set_fg(beautiful.taglist_fg_occupied, beautiful.taglist_hidden)
+			icon = helpers.set_foreground(beautiful.taglist_fg_occupied, beautiful.taglist_hidden)
 		end
 	else --empty
 		if tag.selected then
-			icon = set_fg(beautiful.taglist_fg_focus, beautiful.taglist_focus)
+			icon = helpers.set_foreground(beautiful.taglist_fg_focus, beautiful.taglist_focus)
 		elseif tag.urgent then
-			icon = set_fg(beautiful.taglist_fg_urgent, beautiful.taglist_empty)
+			icon = helpers.set_foreground(beautiful.taglist_fg_urgent, beautiful.taglist_empty)
 		else
-			icon = set_fg(beautiful.taglist_fg_empty, beautiful.taglist_empty)
+			icon = helpers.set_foreground(beautiful.taglist_fg_empty, beautiful.taglist_empty)
 		end
 	end
 
@@ -37,8 +33,6 @@ local create_widget = function(screen)
 		widget = wibox.container.margin,
 		left = beautiful.clickable_container_padding_x,
 		right = beautiful.clickable_container_padding_x,
-		top = beautiful.clickable_container_padding_y,
-		bottom = beautiful.clickable_container_padding_y,
 		awful.widget.taglist({
 			screen = screen,
 			filter = awful.widget.taglist.filter.all,

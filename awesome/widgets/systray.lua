@@ -1,8 +1,3 @@
---
--- systray.lua
--- systray widget
---
-
 local awful = require("awful")
 local wibox = require("wibox")
 local gears = require("gears")
@@ -10,26 +5,12 @@ local beautiful = require("beautiful")
 
 local keys = require("config.keys.map")
 
--- ========================================
--- Config
--- ========================================
-
 -- icons path
 local icons_path = beautiful.icons_path .. "systray/"
-
--- ========================================
--- Definition
--- ========================================
 
 -- update widget
 local update_widget = function(widget)
 	widget.systray.visible = widget.show_systray
-
-	-- if widget.show_systray then
-	-- widget.button.image = icons_path .. "systray_hide.svg"
-	-- else
-	-- widget.button.image = icons_path .. "systray_show.svg"
-	-- end
 end
 
 -- toggle systray visibility
@@ -64,18 +45,14 @@ local create_widget = function(screen)
 
 	local wrapper = wibox.widget({
 		layout = wibox.layout.fixed.horizontal,
-		-- button = button,
 		systray = systray,
 		show_systray = false,
 		systray,
-		-- button_container,
 	})
 
 	-- button_container:buttons(buttons(screen, wrapper))
 
 	systray.visible = false
-	-- button.tooltip = require("widgets.tooltip")({ button_container })
-	-- button.tooltip.text = "Show systray"
 
 	awesome.connect_signal("widget::systray::toggle", function()
 		toggle_systray(wrapper)

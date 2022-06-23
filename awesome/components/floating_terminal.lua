@@ -1,8 +1,3 @@
---
--- floating_terminal.lua
--- floating terminal component
---
-
 local awful = require("awful")
 local beautiful = require("beautiful")
 local dpi = beautiful.xresources.apply_dpi
@@ -21,7 +16,7 @@ local client_name = "FloatingTerminal"
 local client_placement = awful.placement.bottom_right
 
 -- terminal client width
-local client_width = dpi(800)
+local client_width = dpi(888)
 local client_height = dpi(1050)
 local client_x = dpi(0)
 local client_y = dpi(0)

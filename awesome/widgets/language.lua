@@ -4,7 +4,6 @@
 --
 
 local awful = require("awful")
-local wibox = require("wibox")
 local gears = require("gears")
 local beautiful = require("beautiful")
 local helpers = require("helpers")
@@ -12,10 +11,6 @@ local keys = require("config.keys.map")
 
 -- ========================================
 -- Config
--- ========================================
-
--- ========================================
--- Definition
 -- ========================================
 
 -- define buttons
@@ -30,27 +25,20 @@ end
 
 -- update language
 local update_language = function(widget, language)
-	widget.markup = helpers.set_foreground(beautiful.language_fg, beautiful.language_icon .. language)
+	helpers.update_widget(widget).markup = helpers.set_foreground(beautiful.language_fg, beautiful.language_icon .. language)
 
-	-- widget.tooltip.text = language == "unknown" and "Keyboard layout unknown"
-	-- or "Keyboard layout is set to " .. language
 end
 
 -- create widget instance
 local create_widget = function(screen)
-	local widget = wibox.widget({
-		markup = beautiful.widget_loading,
-		widget = wibox.widget.textbox,
-	})
+	local widget = helpers.create_widget()
+
 	awesome.connect_signal("daemon::language", function(...)
 		update_language(widget, ...)
 	end)
 
 	local container = require("widgets.clickable_container")(widget)
 	container:buttons(buttons(screen))
-
-	-- widget.tooltip = require("widgets.tooltip")({ container })
-	-- widget.tooltip.text = "Keyboard layout unknown"
 
 	return container
 end

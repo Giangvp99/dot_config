@@ -8,7 +8,10 @@
 --
 --
 -- Lua
-require("onedark").setup({
-	style = "darker",
-})
-require("onedark").load()
+-- require("onedark").setup({
+-- style = "darker",
+-- })
+-- require("onedark").load()
+
+vim.o.background = "dark" -- to load onedark
+require("onedarkpro").load()

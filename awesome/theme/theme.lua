@@ -82,7 +82,13 @@ theme.notification_font = theme.font
 theme.topbar_position = "top"
 theme.topbar_height = dpi(28)
 theme.topbar_margin = dpi(0)
-theme.topbar_padding_x = dpi(5)
+theme.topbar_padding_x = dpi(8)
+
+-- Leftbar
+theme.leftbar_position = "bot"
+theme.leftbar_width = dpi(38)
+theme.leftbar_margin = dpi(0)
+theme.leftbar_padding_x = dpi(5)
 
 -- Exit screen
 theme.exit_screen_bg = theme.bg_normal .. "aa"

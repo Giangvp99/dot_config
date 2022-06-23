@@ -1,12 +1,7 @@
---
--- helpers.lua
--- helper functions
---
-
 local awful = require("awful")
 local gears = require("gears")
 local beautiful = require("beautiful")
-
+local wibox = require("wibox")
 local helpers = {}
 
 -- ========================================
@@ -204,6 +199,26 @@ end
 -- set foreground widget
 helpers.set_foreground = function(color, content)
 	return "<span foreground='" .. color .. "'>" .. content .. "</span>"
+end
+
+helpers.create_widget = function()
+	return wibox.widget({
+		widget = wibox.container.background,
+		{
+			widget = wibox.container.margin,
+			left = beautiful.topbar_padding_x,
+			right = beautiful.topbar_padding_x,
+			{
+				markup = beautiful.widget_loading,
+				widget = wibox.widget.textbox,
+			}
+		}
+	})
+
+end
+
+helpers.update_widget = function(widget)
+	return widget.widget.widget
 end
 
 return helpers

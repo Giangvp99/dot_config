@@ -4,6 +4,7 @@
   "vim.useSystemClipboard": true,
   "vim.hlsearch": true,
   "vim.leader": "<space>",
+  "vim.foldfix": true,
   "vim.insertModeKeyBindingsNonRecursive": [
     {
       "before": ["j", "j"],
@@ -32,6 +33,10 @@
       "commands": ["workbench.action.terminal.toggleTerminal"]
     },
     {
+      "before": ["<C-w>"],
+      "commands": ["workbench.action.closeActiveEditor"]
+    },
+    {
       "before": ["/", "/"],
       "after": ["g", "c", "c"]
     }
@@ -46,21 +51,22 @@
       "after": ["g", "c"]
     }
   ],
-  "whichkey.sortOrder": "alphabetically",
-  "whichkey.delay": 0,
+  "whichkey.showButtons": false,
+  "whichkey.showIcons": true,
+  "whichkey.sortOrder": "customNonNumberFirst",
+  "whichkey.delay": 10,
   "whichkey.bindings": [
     {
-      "key": " ",
-      "name": "Exit",
+      "key": ".",
+      "name": "Commands",
       "type": "command",
-      "command": "vim.remap",
-      "args": {
-        "commands": [
-          {
-            "command": "<ESC>"
-          }
-        ]
-      }
+      "command": "workbench.action.showCommands"
+    },
+    {
+      "key": "e",
+      "name": "Show explorer",
+      "type": "command",
+      "command": "workbench.view.explorer"
     },
     {
       "key": "n",
@@ -74,190 +80,205 @@
           }
         ]
       }
-    },
+    }, // no hightlight
     {
       "key": "b",
       "name": "Buffers/Editors",
       "type": "bindings",
       "bindings": [
         {
-          "key": "s",
-          "name": "Save all files in group",
-          "type": "command",
-          "command": "workbench.files.action.saveAllInGroup"
-        },
-        {
-          "key": "b",
-          "name": "Show all buffers/editors",
-          "type": "command",
-          "command": "workbench.action.showAllEditors"
-        },
-        {
-          "key": "B",
-          "name": "Show all buffers/editors in active group",
-          "type": "command",
-          "command": "workbench.action.showEditorsInActiveGroup"
-        },
-        {
-          "key": "d",
-          "name": "Close active editor",
-          "type": "command",
-          "command": "workbench.action.closeActiveEditor"
-        },
-        {
-          "key": "h",
-          "name": "Move editor into left group",
-          "type": "command",
-          "command": "workbench.action.moveEditorToLeftGroup"
-        },
-        {
-          "key": "j",
-          "name": "Move editor into below group",
-          "type": "command",
-          "command": "workbench.action.moveEditorToBelowGroup"
-        },
-        {
-          "key": "k",
-          "name": "Move editor into above group",
-          "type": "command",
-          "command": "workbench.action.moveEditorToAboveGroup"
-        },
-        {
-          "key": "l",
-          "name": "Move editor into right group",
-          "type": "command",
-          "command": "workbench.action.moveEditorToRightGroup"
-        },
-        {
-          "key": "D",
-          "name": "Close other editors",
-          "type": "command",
-          "command": "workbench.action.closeOtherEditors"
-        },
-        {
-          "key": "n",
-          "name": "New untitled editor",
-          "type": "command",
-          "command": "workbench.action.files.newUntitledFile"
-        },
-        {
-          "key": "u",
-          "name": "Reopen closed editor",
-          "type": "command",
-          "command": "workbench.action.reopenClosedEditor"
-        },
-        {
-          "key": "p",
-          "name": "Paste clipboard to buffer",
-          "type": "commands",
-          "commands": [
-            "editor.action.selectAll",
-            "editor.action.clipboardPasteAction"
+          "key": "a",
+          "name": "Action...",
+          "type": "bindings",
+          "bindings": [
+            {
+              "key": "a",
+              "name": "Show all buffers/editors",
+              "type": "command",
+              "command": "workbench.action.showAllEditors"
+            },
+            {
+              "key": "A",
+              "name": "Show all buffers/editors in active group",
+              "type": "command",
+              "command": "workbench.action.showEditorsInActiveGroup"
+            },
+            {
+              "key": "c",
+              "name": "Close active editor",
+              "type": "command",
+              "command": "workbench.action.closeActiveEditor"
+            },
+            {
+              "key": "C",
+              "name": "Close other editors",
+              "type": "command",
+              "command": "workbench.action.closeOtherEditors"
+            },
+            {
+              "key": "d",
+              "name": "Close editor group",
+              "type": "command",
+              "command": "workbench.action.closeEditorsInGroup"
+            },
+            {
+              "key": "D",
+              "name": "Close all editor groups",
+              "type": "command",
+              "command": "workbench.action.closeAllGroups"
+            },
+            {
+              "key": "n",
+              "name": "New untitled editor",
+              "type": "command",
+              "command": "workbench.action.files.newUntitledFile"
+            },
+            {
+              "key": "u",
+              "name": "Reopen closed editor",
+              "type": "command",
+              "command": "workbench.action.reopenClosedEditor"
+            },
+            {
+              "key": "p",
+              "name": "Paste clipboard to buffer",
+              "type": "commands",
+              "commands": [
+                "editor.action.selectAll",
+                "editor.action.clipboardPasteAction"
+              ]
+            },
+            {
+              "key": "y",
+              "name": "Copy buffer to clipboard",
+              "type": "commands",
+              "commands": [
+                "editor.action.selectAll",
+                "editor.action.clipboardCopyAction",
+                "cancelSelection"
+              ]
+            },
+            {
+              "key": "s",
+              "name": "Save all files in group",
+              "type": "command",
+              "command": "workbench.files.action.saveAllInGroup"
+            },
+            {
+              "key": "v",
+              "name": "Split buffer below",
+              "type": "command",
+              "command": "workbench.action.splitEditorDown"
+            },
+            {
+              "key": "h",
+              "name": "Split buffer right",
+              "type": "command",
+              "command": "workbench.action.splitEditor"
+            },
+            {
+              "key": "z",
+              "name": "Combine all editors",
+              "type": "command",
+              "command": "workbench.action.joinAllGroups"
+            }
           ]
-        },
+        }, //action
         {
-          "key": "y",
-          "name": "Copy buffer to clipboard",
-          "type": "commands",
-          "commands": [
-            "editor.action.selectAll",
-            "editor.action.clipboardCopyAction",
-            "cancelSelection"
+          "key": "w",
+          "name": "Switch editor ...",
+          "type": "bindings",
+          "bindings": [
+            {
+              "key": "h",
+              "name": "left",
+              "type": "command",
+              "command": "workbench.action.moveActiveEditorGroupLeft"
+            },
+            {
+              "key": "j",
+              "name": "down",
+              "type": "command",
+              "command": "workbench.action.moveActiveEditorGroupDown"
+            },
+            {
+              "key": "k",
+              "name": "up",
+              "type": "command",
+              "command": "workbench.action.moveActiveEditorGroupUp"
+            },
+            {
+              "key": "l",
+              "name": "right",
+              "type": "command",
+              "command": "workbench.action.moveActiveEditorGroupRight"
+            }
           ]
-        }
-      ]
-    },
-    {
-      "key": "w",
-      "name": "Window",
-      "type": "bindings",
-      "bindings": [
-        {
-          "key": "-",
-          "name": "Split editor below",
-          "type": "command",
-          "command": "workbench.action.splitEditorDown"
-        },
-        {
-          "key": "/",
-          "name": "Split editor right",
-          "type": "command",
-          "command": "workbench.action.splitEditor"
-        },
-        {
-          "key": "d",
-          "name": "Split editor below",
-          "type": "command",
-          "command": "workbench.action.decreaseViewSize"
-        },
-        {
-          "key": "i",
-          "name": "Split editor below",
-          "type": "command",
-          "command": "workbench.action.increaseViewSize"
-        },
-        {
-          "key": "h",
-          "name": "Move editor group left",
-          "type": "command",
-          "command": "workbench.action.moveActiveEditorGroupLeft"
-        },
-        {
-          "key": "j",
-          "name": "Move editor group down",
-          "type": "command",
-          "command": "workbench.action.moveActiveEditorGroupDown"
-        },
-        {
-          "key": "k",
-          "name": "Move editor group up",
-          "type": "command",
-          "command": "workbench.action.moveActiveEditorGroupUp"
-        },
-        {
-          "key": "l",
-          "name": "Move editor group right",
-          "type": "command",
-          "command": "workbench.action.moveActiveEditorGroupRight"
-        },
-        {
-          "key": "t",
-          "name": "Toggle editor group sizes",
-          "type": "command",
-          "command": "workbench.action.toggleEditorWidths"
-        },
+        }, //switch
         {
           "key": "m",
-          "name": "Maximize editor group",
-          "type": "command",
-          "command": "workbench.action.minimizeOtherEditors"
-        },
+          "name": "Move editor ...",
+          "type": "bindings",
+          "bindings": [
+            {
+              "key": "h",
+              "name": "into left",
+              "type": "command",
+              "command": "workbench.action.moveEditorToLeftGroup"
+            },
+            {
+              "key": "j",
+              "name": "into below",
+              "type": "command",
+              "command": "workbench.action.moveEditorToBelowGroup"
+            },
+            {
+              "key": "k",
+              "name": "into above",
+              "type": "command",
+              "command": "workbench.action.moveEditorToAboveGroup"
+            },
+            {
+              "key": "l",
+              "name": "into right",
+              "type": "command",
+              "command": "workbench.action.moveEditorToRightGroup"
+            }
+          ]
+        }, //move
         {
-          "key": "=",
-          "name": "Reset editor group sizes",
-          "type": "command",
-          "command": "workbench.action.evenEditorWidths"
-        },
-        {
-          "key": "z",
-          "name": "Combine all editors",
-          "type": "command",
-          "command": "workbench.action.joinAllGroups"
-        },
-        {
-          "key": "d",
-          "name": "Close editor group",
-          "type": "command",
-          "command": "workbench.action.closeEditorsInGroup"
-        },
-        {
-          "key": "x",
-          "name": "Close all editor groups",
-          "type": "command",
-          "command": "workbench.action.closeAllGroups"
-        }
+          "key": "r",
+          "name": "Resize ...",
+          "type": "bindings",
+          "bindings": [
+            {
+              "key": "d",
+              "name": "Decrease",
+              "type": "command",
+              "command": "workbench.action.decreaseViewSize"
+            },
+            {
+              "key": "i",
+              "name": "Increase",
+              "type": "command",
+              "command": "workbench.action.increaseViewSize"
+            },
+            {
+              "key": "m",
+              "name": "Maximize editor group",
+              "type": "command",
+              "command": "workbench.action.minimizeOtherEditors"
+            },
+            {
+              "key": "r",
+              "name": "Reset editor group sizes",
+              "type": "command",
+              "command": "workbench.action.evenEditorWidths"
+            }
+          ]
+        } //resize
       ]
-    },
+    }, // buffers
     {
       "key": "g",
       "name": "Git",
@@ -324,67 +345,88 @@
           "command": "git.unstage"
         }
       ]
-    },
+    }, // git
     {
-      "key": "s",
-      "name": "Sidebar",
+      "key": "t",
+      "name": "Toggle ...",
       "type": "bindings",
       "bindings": [
         {
-          "key": "T",
-          "name": "Show activity bar",
-          "type": "command",
-          "command": "workbench.action.toggleActivityBarVisibility"
-        },
-        {
-          "key": "t",
-          "name": "Show side bar",
-          "type": "command",
-          "command": "workbench.action.toggleSidebarVisibility"
-        },
-        {
-          "key": "e",
-          "name": "Show explorer",
-          "type": "command",
-          "command": "workbench.view.explorer"
-        },
-        {
           "key": "s",
-          "name": "Show search",
-          "type": "command",
-          "command": "workbench.view.search"
-        },
+          "name": "Sidebar",
+          "type": "bindings",
+          "bindings": [
+            {
+              "key": "s",
+              "name": "Show search",
+              "type": "command",
+              "command": "workbench.view.search"
+            },
+            {
+              "key": "g",
+              "name": "Show source control",
+              "type": "command",
+              "command": "workbench.view.scm"
+            },
+            {
+              "key": "d",
+              "name": "Run and debug",
+              "type": "command",
+              "command": "workbench.view.debug"
+            },
+            {
+              "key": "x",
+              "name": "Show extensions",
+              "type": "command",
+              "command": "workbench.view.extensions"
+            },
+            {
+              "key": "a",
+              "name": "Toggle activitybar",
+              "type": "command",
+              "command": "workbench.action.toggleActivityBarVisibility"
+            }
+          ]
+        }, // side bar
         {
-          "key": "g",
-          "name": "Show source control",
-          "type": "command",
-          "command": "workbench.view.scm"
-        },
-        {
-          "key": "d",
-          "name": "Run and debug",
-          "type": "command",
-          "command": "workbench.view.debug"
-        },
-        {
-          "key": "x",
-          "name": "Show extensions",
-          "type": "command",
-          "command": "workbench.view.extensions"
-        },
-        {
-          "key": "a",
-          "name": "Toggle activitybar",
-          "type": "command",
-          "command": "workbench.action.toggleActivityBarVisibility"
+          "key": "p",
+          "name": "Panel",
+          "type": "bindings",
+          "bindings": [
+            {
+              "key": "p",
+              "name": "Problems",
+              "type": "command",
+              "command": "workbench.actions.view.problems"
+            },
+            {
+              "key": "o",
+              "name": "Output",
+              "type": "command",
+              "command": "workbench.action.output.toggleOutput"
+            },
+            {
+              "key": "d",
+              "name": "Debug console",
+              "type": "command",
+              "command": "workbench.debug.action.toggleRepl"
+            }
+          ]
         }
       ]
-    },
+    }, // toggle
     {
       "key": "l",
       "name": "LSP...",
       "type": "bindings",
       "bindings": [
+        {
+          "key": "c",
+          "name": "clear import ",
+          "type": "command",
+          "command": "editor.action.organizeImports",
+          "when": "editorTextFocus && !editorReadonly && supportedCodeAction =~ /(\\s|^)source\\.organizeImports\\b/"
+        },
         {
           "key": "f",
           "name": "Format",
@@ -435,7 +477,7 @@
           "key": "a",
           "name": "Code actions",
           "type": "command",
-          "command": "editor.action.quickFix",
+          "command": "keyboard-quickfix.openQuickFix",
           "when": "editorTextFocus"
         },
         {
@@ -480,7 +522,7 @@
           "when": "editorFocus"
         }
       ]
-    },
+    }, // lsp
     {
       "key": "o",
       "name": "Open...",
@@ -505,7 +547,7 @@
           "command": "workbench.action.openRecent"
         }
       ]
-    },
+    }, // opening ...
     {
       "key": "d",
       "name": "Debug",
@@ -602,37 +644,12 @@
           "command": "editor.debug.action.selectionToWatch"
         }
       ]
-    },
+    }, // debug
     {
-      "key": "p",
-      "name": "Panel",
-      "type": "bindings",
-      "bindings": [
-        {
-          "key": "p",
-          "name": "Problems",
-          "type": "command",
-          "command": "workbench.actions.view.problems"
-        },
-        {
-          "key": "o",
-          "name": "Output",
-          "type": "command",
-          "command": "workbench.action.output.toggleOutput"
-        },
-        {
-          "key": "d",
-          "name": "Debug console",
-          "type": "command",
-          "command": "workbench.debug.action.toggleRepl"
-        }
-      ]
-    },
-    {
-      "key": ".",
-      "name": "Commands",
+      "key": "f",
+      "name": "Fold",
       "type": "command",
-      "command": "workbench.action.showCommands"
+      "command": "editor.toggleFold"
     }
   ],
   "workbench.list.automaticKeyboardNavigation": false,
@@ -646,17 +663,15 @@
   "editor.fontSize": 12.4,
   "window.zoomLevel": 1,
   "editor.fontLigatures": true,
-  "window.menuBarVisibility": "toggle",
+  "window.menuBarVisibility": "hidden",
   "terminal.external.linuxExec": "/usr/bin/alacritty",
   "emmet.showSuggestionsAsSnippets": true,
   "git.autofetch": true,
   "editor.snippetSuggestions": "bottom",
-  "workbench.iconTheme": "material-icon-theme",
   "editor.minimap.enabled": false,
   "zenMode.hideActivityBar": true,
-  "workbench.colorTheme": "One Dark Pro",
+  "workbench.colorTheme": "One Dark Pro Flat",
   "workbench.startupEditor": "none",
-  "bracketPairColorizer.depreciation-notice": false,
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -681,5 +696,12 @@
   "[typescript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "security.workspace.trust.untrustedFiles": "newWindow",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.editor.decorations.badges": false,
+  "files.autoSave": "afterDelay",
   "workbench.activityBar.visible": false
 }

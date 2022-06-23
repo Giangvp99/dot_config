@@ -1,9 +1,3 @@
----@diagnostic disable: undefined-global
---
--- tasklist.lua
--- tasklist component
---
-
 local awful = require("awful")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
@@ -15,9 +9,11 @@ local minimized_client = helpers.set_foreground(beautiful.tasklist_fg_minimized,
 local floating_client = helpers.set_foreground(beautiful.tasklist_fg_floating, beautiful.tasklist_floating)
 local ontop_client = helpers.set_foreground(beautiful.tasklist_fg_floating, beautiful.tasklist_ontop)
 local maximized_client = helpers.set_foreground(beautiful.tasklist_fg_floating, beautiful.tasklist_maximized)
+
 local compare = function(a, b)
 	return a.window < b.window
 end
+
 local get_clients_status = function(screen)
 	local res = ""
 
@@ -28,8 +24,7 @@ local get_clients_status = function(screen)
 	end
 
 	for _, c in ipairs(screen.hidden_clients) do
-		if
-			not (c.skip_taskbar or c.hidden or c.type == "splash" or c.type == "dock" or c.type == "desktop")
+		if not (c.skip_taskbar or c.hidden or c.type == "splash" or c.type == "dock" or c.type == "desktop")
 			and c.minimized
 			and awful.widget.tasklist.filter.currenttags(c, awful.screen.focused())
 		then
@@ -55,25 +50,15 @@ local get_clients_status = function(screen)
 	end
 	return res
 end
+
 -- update widget info
 local update_widget = function(widget, screen)
-	widget.widget.markup = get_clients_status(screen)
+	helpers.update_widget(widget).markup = get_clients_status(screen)
 end
 
 -- create taglist widget instance
 local create_widget = function(screen)
-	local widget = wibox.widget({
-		widget = wibox.container.margin,
-		left = beautiful.clickable_container_padding_x,
-		right = beautiful.clickable_container_padding_x,
-		{
-			-- valign = "center",
-			-- align = "center",
-			markup = beautiful.widget_loading,
-			font = beautiful.tasklist_font,
-			widget = wibox.widget.textbox,
-		},
-	})
+	local widget = helpers.create_widget()
 
 	client.connect_signal("unmanage", function()
 		update_widget(widget, screen)
@@ -99,7 +84,7 @@ local create_widget = function(screen)
 	client.connect_signal("property::ontop", function()
 		update_widget(widget, screen)
 	end)
-	awful.tag.attached_connect_signal(s, "property::selected", function()
+	awful.tag.attached_connect_signal(screen, "property::selected", function()
 		update_widget(widget, screen)
 	end)
 

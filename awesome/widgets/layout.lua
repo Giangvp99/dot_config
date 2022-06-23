@@ -1,9 +1,3 @@
---
--- layout.lua
--- display currently active layout
---
-
-local wibox = require("wibox")
 local beautiful = require("beautiful")
 local helpers = require("helpers")
 
@@ -17,29 +11,17 @@ local update_widget = function(widget, tag)
 		icon_name = icon_name .. beautiful.layout_tile
 	end
 
-	widget.widget.markup = helpers.set_foreground(beautiful.layout_fg, icon_name)
-	-- widget.tooltip.text = layout.name
+	helpers.update_widget(widget).markup = helpers.set_foreground(beautiful.layout_fg, icon_name)
 end
 
 -- create widget instance
 local create_widget = function(screen)
-	local widget = wibox.widget({
-		widget = wibox.container.margin,
-		left = beautiful.clickable_container_padding_x,
-		right = beautiful.clickable_container_padding_x,
-		top = beautiful.clickable_container_padding_y,
-		bottom = beautiful.clickable_container_padding_y,
-		{
-			markup = beautiful.widget_loading,
-			widget = wibox.widget.textbox,
-			font = beautiful.basic_font .. " 14",
-			resize = true,
-		},
-	})
+	local widget = helpers.create_widget()
 
 	tag.connect_signal("property::layout", function(t)
 		update_widget(widget, t)
 	end)
+
 	tag.connect_signal("property::selected", function(t)
 		update_widget(widget, t)
 	end)

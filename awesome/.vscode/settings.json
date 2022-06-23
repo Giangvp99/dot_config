@@ -6,5 +6,8 @@
         "client",
         "mouse",
         "tag"
+    ],
+    "Lua.diagnostics.disable": [
+        "undefined-field"
     ]
 }
