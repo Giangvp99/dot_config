@@ -1,69 +1,6 @@
 * Initial Config
-** UI
-*** Frame
-#+begin_src emacs-lisp
-  ;; -*- lexical-binding: t; -*-
-  ;; Don't resize the frames in steps; it looks weird, especially in tiling window
-  ;; managers, where it can leave unseemly gaps.
-  (setq frame-resize-pixelwise t)
-
-  ;; But do not resize windows pixelwise, this can cause crashes in some cases
-  ;; when resizing too many windows at once or rapidly.
-  (setq window-resize-pixelwise nil)
-
-  ;; Disable tool, menu, and scrollbars. Doom is designed to be keyboard-centric,
-  ;; so these are just clutter (the scrollbar also impacts performance). Whats
-  ;; more, the menu bar exposes functionality that Doom doesn't endorse.
-  ;;
-  ;; I am intentionally not calling `menu-bar-mode', `tool-bar-mode', and
-  ;; `scroll-bar-mode' because they do extra and unnecessary work that can be more
-  ;; concisely and efficiently expressed with these six lines:
-  (push '(menu-bar-lines . 0)   default-frame-alist)
-  (push '(tool-bar-lines . 0)   default-frame-alist)
-  (push '(vertical-scroll-bars) default-frame-alist)
-  ;; And set these to nil so users don't have to toggle the modes twice to
-  ;; reactivate them.
-  (setq menu-bar-mode nil
-        tool-bar-mode nil
-        scroll-bar-mode nil)
-
-  ;; The native border "consumes" a pixel of the fringe on righter-most splits,
-  ;; `window-divider' does not. Available since Emacs 25.1.
-  (setq window-divider-default-places t
-        window-divider-default-bottom-width 1
-        window-divider-default-right-width 1)
-#+end_src
-*** Colume mode
-#+begin_src emacs-lisp
-  (column-number-mode)
-
-  ;; Enable line numbers for some modes
-  (dolist (mode '(text-mode-hook
-                  prog-mode-hook
-                  conf-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 1))))
-
-  ;; Override some modes which derive from the above
-  (dolist (mode '(org-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0))))
-#+end_src
-*** Scroll
-#+begin_src emacs-lisp
-  (setq scroll-conservatively 101) ;; value greater than 100 gets rid of half page jumping
-  (setq mouse-wheel-scroll-amount '(3 ((shift) . 3))) ;; how many lines at a time
-  (setq mouse-wheel-progressive-speed t) ;; accelerate scrolling
-  (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
-#+end_src
-*** Tab Widths
-#+begin_src emacs-lisp
-  (setq-default tab-width 2)
-  (setq-default evil-shift-width tab-width)
-#+end_src
-*** Font
-#+begin_src emacs-lisp
-  (set-face-attribute 'default nil :font "Fira Code Medium" :height 100)
-#+end_src
 ** Startup Performance
+Make startup faster by reducing the frequency of garbage collection and then use a hook to measure Emacs startup time.
 #+begin_src emacs-lisp
   ;; The default is 800 kilobytes.  Measured in bytes.
   (setq gc-cons-threshold (* 50 1000 1000))
@@ -75,7 +12,8 @@
                        (emacs-init-time "%.2f")
                        gcs-done)))
 #+end_src
-** COMMENT Package Management
+** Package Management
+*** COMMENT use-package
 #+begin_src emacs-lisp
   ;; Initialize package sources
   (require 'package)
@@ -100,7 +38,7 @@
 
   (setq use-package-always-ensure t)
 #+end_src
-** straight.el
+*** straight.el
 #+begin_src emacs-lisp
   ;; Bootstrap straight.el
   (unless (featurep 'straight)
@@ -124,8 +62,10 @@
   ;; Always use straight to install on systems other than Linux
   (setq straight-use-package-by-default t)
 #+end_src
+Sometimes it’s good to clean up unused repositories if I’ve removed packages from my configuration. Use straight-remove-unused-repos for this purpose.
 ** setup.el
 *** config
+switched to the excellent setup.el by pkal as an alternative to use-package.
 #+begin_src emacs-lisp
   (straight-use-package 'setup)
   (require 'setup)
@@ -148,6 +88,7 @@
                      recipe))))
 #+end_src
 *** :load-after
+This keyword causes a body to be executed after other packages/features are loaded:
 #+begin_src emacs-lisp
   (setup-define :load-after
       (lambda (&rest features)
@@ -158,6 +99,7 @@
     :documentation "Load the current feature after FEATURES.")
 #+end_src
 *** :delay
+Delay the loading of a package until a certain amount of idle time has passed.
 #+begin_src emacs-lisp
   (setup-define :delay
      (lambda (&rest time)
@@ -167,115 +109,27 @@
      :documentation "Delay loading the feature until a certain amount of idle time has passed.")
 #+end_src
 *** :disable
+Used to disable a package configuration, similar to :disabled in use-package.
 #+begin_src emacs-lisp
   (setup-define :disabled
     (lambda ()
       `,(setup-quit))
     :documentation "Always stop evaluating the body.")
 #+end_src
-** Keys
+** COMMENT Server Mode
+Start the Emacs server from this instance so that all emacsclient calls are routed here.
 #+begin_src emacs-lisp
-  (define-key key-translation-map (kbd "C-c") (kbd "C-g"))
+  (server-start)
 #+end_src
-* Packages
-** UI
-*** Modeline
-#+begin_src emacs-lisp
-  (setup (:straight diminish))
-
-  (setup (:straight doom-modeline)
-    (:option doom-modeline-mode 1
-             doom-modeline-height 15))
-  (setup (:straight rainbow-delimiters)
-    (:hook prog-mode ))
-#+end_src
-*** Theme
-#+begin_src emacs-lisp
-  (setup (:straight doom-themes)
-    (load-theme 'doom-one t))
-#+end_src
-*** Key cheat sheet
-#+begin_src emacs-lisp
-  (setup (:straight which-key)
-    (diminish 'which-key-mode)
-    (which-key-mode)
-    (setq which-key-side-window-location 'bottom
-            which-key-popup-type 'minibuffer
-            which-key-sort-order #'which-key-key-order-alpha
-            which-key-sort-uppercase-first nil
-            which-key-add-column-padding 1
-            which-key-max-display-columns nil
-            which-key-min-display-lines 6
-            which-key-side-window-slot -10
-            which-key-side-window-max-height 0.25
-            which-key-idle-delay 0.3
-            which-key-max-description-length 25
-            which-key-allow-imprecise-window-fit t
-            which-key-separator " → " ))
-#+end_src
-*** Interface Enhancement
-**** Dashboard
-#+begin_src emacs-lisp
-  (setup (:straight all-the-icons))
-
-  (use-package dashboard
-  :init      ;; tweak dashboard config before loading it
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-banner-logo-title "Emacs Is More Than A Text Editor!")
-  (setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
-  ;;(setq dashboard-startup-banner "~/.emacs.d/emacs-dash.png")  ;; use custom image as banner
-  (setq dashboard-center-content nil) ;; set to 't' for centered content
-  (setq dashboard-items '((recents . 5)
-                          (agenda . 5 )
-                          (bookmarks . 3)
-                          (projects . 3)
-                          (registers . 3)))
-  :config
-  (dashboard-setup-startup-hook)
-  (dashboard-modify-heading-icons '((recents . "file-text")
-                              (bookmarks . "book"))))
-
-#+end_src
-** Key-bindings
-*** Leader Bindings (general.el)
-#+begin_src emacs-lisp
-  (setup (:straight general)
-    (general-evil-setup t)
-
-    (general-create-definer leader-key-def
-      :keymaps '(normal insert visual emacs)
-      :prefix "SPC"
-      :global-prefix "C-SPC"))
-#+end_src
-*** Hydra
-#+begin_src emacs-lisp
-  (setup (:straight hydra)
-    (require 'hydra))
-
-  (defhydra hydra-text-scale (:timeout 3)
-    "scale text"
-    ("j" text-scale-increase "in")
-    ("k" text-scale-decrease "out")
-    ("f" nil "finished" :exit t))
-
-  (leader-key-def
-    "ts" '(hydra-text-scale/body :which-key "scale text"))
-#+end_src
-*** Evil
-**** config
-***** defun
+** Evil
+*** defun
 #+begin_src emacs-lisp
   (defun dont-arrow-me-bro ()
-  (interactive)
-  (message "Arrow keys are bad, you know?"))
+    (interactive)
+    (message "Arrow keys are bad, you know?"))
 #+end_src
-***** Evil
+*** configs
 #+begin_src emacs-lisp
-  (setup (:straight undo-tree)
-    (:option undo-tree-auto-save-history nil
-    global-undo-tree-mode 1))
-
   (setup (:straight evil)
     ;; preload config
     (setq evil-want-integration t)
@@ -327,41 +181,96 @@
     (:load-after evil)
     (evil-escape-mode 1)
     (setq-default evil-escape-key-sequence "jk"))
+
+  (setup (:straight undo-tree)
+    (:load-after evil)
+    (:option undo-tree-auto-save-history nil
+             global-undo-tree-mode 1))
 #+end_src
 
-**** keys
-***** Window
+* General Config
+** UI
+*** Theme
 #+begin_src emacs-lisp
-  (define-key evil-normal-state-map (kbd "M-l") 'windmove-right)
-  (define-key evil-normal-state-map (kbd "M-h") 'windmove-left)
-  (define-key evil-normal-state-map (kbd "M-j") 'windmove-down)
-  (define-key evil-normal-state-map (kbd "M-k") 'windmove-up)
-
-  (leader-key-def
-    ;; Window splits
-	 "w"     '(:ignore t :which-key "window")
-	 "w c"   '(evil-window-delete :which-key "Close window")
-	 "w n"   '(evil-window-new :which-key "New window")
-	 "w s"   '(evil-window-split :which-key "Horizontal split window")
-	 "w v"   '(evil-window-vsplit :which-key "Vertical split window")
-	 ;; Window motions
-	 "w h"   '(evil-window-left :which-key "Window left")
-	 "w j"   '(evil-window-down :which-key "Window down")
-	 "w k"   '(evil-window-up :which-key "Window up")
-	 "w l"   '(evil-window-right :which-key "Window right")
-	 "w w"   '(evil-window-next :which-key "Goto next window")
-	 ;; winner mode
-	 "w <left>"  '(winner-undo :which-key "Winner undo")
-	 "w <right>" '(winner-redo :which-key "Winner redo"))
+  (setup (:straight doom-themes)
+    (load-theme 'doom-one t))
 #+end_src
-***** Emacs
+*** Font
 #+begin_src emacs-lisp
-  (leader-key-def
-    "."      '(counsel-M-x :which-key "Commands(M-x)")
-    "SPC"    '(:ignore t :which-key "emacs")
-    "SPC c"  '(compile :which-key "Compile")
-    "SPC C"  '(recompile :which-key "Recompile")
-    "SPC r"  '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :which-key "Reload emacs config"))
+  ;; Set the font face based on platform
+  (set-face-attribute 'default nil
+                      :font "FiraCode Nerd Font"
+                      :height 102)
+
+  ;; Set the fixed pitch face
+  (set-face-attribute 'fixed-pitch nil
+                      :font "FiraCode Nerd Font"
+                      :height 102)
+
+  ;; Set the variable pitch face
+  (set-face-attribute 'variable-pitch nil
+                      :font "FiraCode Nerd Font"
+                      :height 102)
+#+end_src
+*** Ligature
+#+begin_src emacs-lisp
+  (setup (:straight fira-code-mode)
+    (:load-after evil)
+    (global-fira-code-mode))
+#+end_src
+*** Modeline
+#+begin_src emacs-lisp
+  (setup (:straight minions)
+    (:hook-into doom-modeline-mode))
+
+  (setup (:straight doom-modeline)
+    (:hook-into after-init-hook)
+    (:option doom-modeline-height 18
+             doom-modeline-bar-width 3
+             doom-modeline-lsp t
+             doom-modeline-github nil
+             doom-modeline-mu4e nil
+             doom-modeline-irc t
+             doom-modeline-minor-modes t
+             doom-modeline-persp-name nil
+             doom-modeline-buffer-file-name-style 'truncate-except-project
+             doom-modeline-major-mode-icon nil)
+    (custom-set-faces '(mode-line ((t (:height 0.95))))
+                      '(mode-line-inactive ((t (:height 0.90))))))
+
+  (setup (:straight rainbow-delimiters)
+    (:hook prog-mode ))
+#+end_src
+*** COMMENT Dashboard
+#+begin_src emacs-lisp
+    (setup (:straight all-the-icons))
+
+  (use-package dashboard
+    :init      ;; tweak dashboard config before loading it
+    (setq dashboard-set-heading-icons t)
+    (setq dashboard-set-file-icons t)
+    (setq dashboard-center-content nil) ;; set to 't' for centered content
+    (setq dashboard-items '((recents . 5)
+                            (agenda . 5 )
+                            (bookmarks . 5)
+                            (projects . 5)
+                            (registers . 5)))
+    :config
+    (dashboard-setup-startup-hook)
+    (dashboard-modify-heading-icons '((recents . "file-text")
+                                      (bookmarks . "book"))))
+
+    (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+#+end_src
+** Editing Configuration
+*** Commenting Lines
+#+begin_src emacs-lisp
+  (setup (:straight evil-nerd-commenter))
+#+end_src
+*** Automatically clean whitespace
+#+begin_src emacs-lisp
+  (setup (:straight ws-butler)
+    (:hook-into text-mode prog-mode))
 #+end_src
 ** Completion System
 *** Vertio
@@ -396,7 +305,8 @@
              "C-k" corfu-previous
              "TAB" corfu-insert
              "C-f" corfu-insert))
-    (:option corfu-cycle t))
+    (:option corfu-cycle t)
+    (corfu-mode))
 #+end_src
 *** Orderless
 #+begin_src emacs-lisp
@@ -480,7 +390,60 @@
   (setup (:straight smex)
     (smex-initialize))
 #+end_src
-*** Ivy
+*** COMMENT Bufler
+#+begin_src emacs-lisp
+  (setup (:straight bufler)
+    (:disabled)
+    (:global "C-M-j" bufler-switch-buffer
+             "C-M-k" bufler-workspace-frame-set)
+    (:when-loaded
+     (progn
+       :config
+       (evil-collection-define-key 'normal 'bufler-list-mode-map
+         (kbd "RET") 'bufler-list-buffer-switch
+         (kbd "M-RET") 'bufler-list-buffer-peek
+         "D" 'bufler-list-buffer-kill)
+
+       (setf bufler-groups
+             (bufler-defgroups
+              ;; Subgroup collecting all named workspaces.
+              (group (auto-workspace))
+              ;; Subgroup collecting buffers in a projectile project.
+              (group (auto-projectile))
+              ;; Grouping browser windows
+              (group
+               (group-or "Browsers"
+                         (name-match "Vimb" (rx bos "vimb"))
+                         (name-match "Qutebrowser" (rx bos "Qutebrowser"))
+                         (name-match "Chromium" (rx bos "Chromium"))))
+              (group
+               (group-or "Chat"
+                         (mode-match "Telega" (rx bos "telega-"))))
+              (group
+               ;; Subgroup collecting all `help-mode' and `info-mode' buffers.
+               (group-or "Help/Info"
+                         (mode-match "*Help*" (rx bos (or "help-" "helpful-")))
+                         ;; (mode-match "*Helpful*" (rx bos "helpful-"))
+                         (mode-match "*Info*" (rx bos "info-"))))
+              (group
+               ;; Subgroup collecting all special buffers (i.e. ones that are not
+               ;; file-backed), except `magit-status-mode' buffers (which are allowed to fall
+               ;; through to other groups, so they end up grouped with their project buffers).
+               (group-and "*Special*"
+                          (name-match "**Special**"
+                                      (rx bos "*" (or "Messages" "Warnings" "scratch" "Backtrace" "Pinentry") "*"))
+                          (lambda (buffer)
+                            (unless (or (funcall (mode-match "Magit" (rx bos "magit-status"))
+                                                 buffer)
+                                        (funcall (mode-match "Dired" (rx bos "dired"))
+                                                 buffer)
+                                        (funcall (auto-file) buffer))
+                              "*Special*"))))
+              ;; Group remaining buffers by major mode.
+              (auto-mode))))))
+
+#+end_src
+*** COMMENT Ivy
 #+begin_src emacs-lisp
   (use-package ivy
     :diminish
@@ -584,19 +547,6 @@
     (ivy-prescient-mode 1))
 
 #+end_src
-
-** Editing Configuration
-*** Commenting Lines
-#+begin_src emacs-lisp
-  (setup (:straight evil-nerd-commenter)
-    (leader-key-def
-      "/"  '(evilnc-comment-or-uncomment-lines :which-key "toggle comment")))
-#+end_src
-*** Automatically clean whitespace
-#+begin_src emacs-lisp
-  (setup (:straight ws-butler)
-    (:hook-into text-mode prog-mode))
-#+end_src
 ** Development
 *** Projectile
 #+begin_src emacs-lisp
@@ -612,18 +562,10 @@
       (setq projectile-project-search-path '("~/Documents/Code")))
     (setq projectile-switch-project-action #'switch-project-action)
 
-    (projectile-mode)
+    (projectile-mode))
 
-    (leader-key-def
-      "pf"  'projectile-find-file
-      "ps"  'projectile-switch-project
-      "pF"  'consult-ripgrep
-      "pp"  'projectile-find-file
-      "pc"  'projectile-compile-project
-      "pd"  'projectile-dired))
-
-  (setup (:straight counsel-projectile )
-    (counsel-projectile-mode))
+  ;; (setup (:straight counsel-projectile )
+  ;;   (counsel-projectile-mode))
 #+end_src
 *** Git
 **** Magit
@@ -643,6 +585,28 @@
     (show-paren-mode 1))
 #+end_src
 *** File Browsing
+**** Neotree
+#+begin_src emacs-lisp
+  (setup (:straight neotree)
+    (setq neo-smart-open t
+          neo-window-width 30
+          neo-theme (if (display-graphic-p) 'icons 'arrow)
+          ;;neo-window-fixed-size nil
+          inhibit-compacting-font-caches t
+          projectile-switch-project-action 'neotree-projectile-action)
+    ;; truncate long file names in neotree
+    (add-hook 'neo-after-create-hook
+              #'(lambda (_)
+                  (with-current-buffer (get-buffer neo-buffer-name)
+                    (setq truncate-lines t)
+                    (setq word-wrap nil)
+                    (make-local-variable 'auto-hscroll-mode)
+                    (setq auto-hscroll-mode nil))))
+    (evil-define-key 'normal neotree-mode-map (kbd "a") 'neotree-create-node))
+
+  ;; show hidden files
+  (setq-default neo-show-hidden-files t)
+#+end_src
 **** Files and Dired
 #+begin_src emacs-lisp
   (setup (:straight recentf)
@@ -709,28 +673,6 @@
     (dired-rainbow-define vc "#0074d9" ("git" "gitignore" "gitattributes" "gitmodules"))
     (dired-rainbow-define-chmod executable-unix "#38c172" "-.*x.*"))
 #+end_src
-**** Keys
-***** Files
-#+begin_src emacs-lisp
-	(leader-key-def
-		"f"   '(:ignore t :which-key "files")
-		"ff"  '(find-file :which-key "open file")
-		"fr"  '(consult-recent-file :which-key "recent files")
-		"fR"  '(revert-buffer :which-key "revert file")
-		"fj"  '(counsel-file-jump :which-key "jump to file"))
-#+end_src
-***** Buffers
-#+begin_src emacs-lisp
-  (leader-key-def
-    "b"     '(:ignore t :which-key "buffers")
-    "b b"   '(ibuffer :which-key "Ibuffer")
-    "b c"   '(clone-indirect-buffer-other-window :which-key "Clone indirect buffer other window")
-    "b k"   '(kill-current-buffer :which-key "Kill current buffer")
-    "b n"   '(next-buffer :which-key "Next buffer")
-    "b p"   '(previous-buffer :which-key "Previous buffer")
-    "b B"   '(ibuffer-list-buffers :which-key "Ibuffer list buffers")
-    "b K"   '(kill-buffer :which-key "Kill buffer"))
-#+end_src
 *** Languages
 **** Config
 ***** LSP
@@ -743,18 +685,7 @@
       "C-k" lsp-signature-previous
       "C-c" lsp-signature-stop
       "C-a" lsp-signature-activate)
-    (:option lsp-headerline-breadcrumb-enable t)
-
-    (leader-key-def
-     "l" '(:ignore t :which-key "lsp")
-     "ld" 'xref-find-definitions
-     "lr" 'xref-find-references
-     "ln" 'lsp-ui-find-next-reference
-     "lp" 'lsp-ui-find-prev-reference
-     "ls" 'counsel-imenu
-     "le" 'lsp-ui-flycheck-list
-     "lS" 'lsp-ui-sideline-mode
-     "lX" 'lsp-execute-code-action))
+    (:option lsp-headerline-breadcrumb-enable t))
 
   (setup (:straight lsp-ui)
     (:hook-into lsp-mode)
@@ -802,8 +733,7 @@
 
 	(defun set-js-indentation ()
 		(setq-default js-indent-level 2)
-		(setq-default evil-shift-width js-indent-level)
-		(setq-default tab-width 2))
+		(setq-default evil-shift-width js-indent-level))
 
 	(setup (:straight js2-mode)
 		(:file-match "\\.jsx?\\'")
@@ -842,10 +772,9 @@
 *** Workspaces
 #+begin_src emacs-lisp
   (setup (:straight perspective)
-    (:global "C-M-k" persp-switch
-             "C-M-n" persp-next
-             "C-x k" persp-kill-buffer*)
-    (:option persp-initial-frame-name "Main"
+    (:option persp-initial-frame-name "main"
+             ;; persp-show-modestring nil
+             persp-modestring-short t
              persp-mode-prefix-key (kbd "S-SPC"))
     ;; Running `persp-mode' multiple times resets the perspective list...
     (unless (equal persp-mode t)
@@ -853,15 +782,25 @@
 #+end_src
 *** Terminal
 #+begin_src emacs-lisp
-  (setup (:straight vterm)
-    (:bind "M-h" windmove-left
-           "M-j" windmove-down
-           "M-k" windmove-up
-           "M-l" windmove-right)
+	(setup (:straight vterm)
+		(:bind "M-h" windmove-left
+					 "M-j" windmove-down
+					 "M-k" windmove-up
+					 "M-l" windmove-right
+					 "M-c" vterm-send-C-c)
+		(:when-loaded
+		 (progn
+			 (setq vterm-max-scrollback 10000)
+			 (advice-add 'evil-collection-vterm-insert :before #'vterm-reset-cursor-point))))
+#+end_src
+*** Auto-Saving Changed Files
+#+begin_src emacs-lisp
+  (setup (:straight super-save)
+    (:delay)
     (:when-loaded
-     (progn
-       (setq vterm-max-scrollback 10000)
-       (advice-add 'evil-collection-vterm-insert :before #'vterm-reset-cursor-point))))
+      (super-save-mode +1)
+      (diminish 'super-save-mode)
+      (setq super-save-auto-save-when-idle t)))
 #+end_src
 * Org Mode
 ** Config
@@ -979,4 +918,144 @@
       (add-to-list 'org-structure-template-alist '("go" . "src go"))
       (add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
       (add-to-list 'org-structure-template-alist '("json" . "src json"))))
+#+end_src
+
+* Keys Config
+** Keys Management
+*** config
+#+begin_src emacs-lisp
+  (define-key key-translation-map (kbd "C-c") (kbd "C-g"))
+  (global-set-key (kbd "<C-c>") 'keyboard-escape-quit)
+#+end_src
+*** which-key
+#+begin_src emacs-lisp
+  (setup (:straight diminish))
+  
+  (setup (:straight which-key)
+    (diminish 'which-key-mode)
+    (which-key-mode)
+    (setq which-key-side-window-location 'bottom
+	    which-key-popup-type 'minibuffer
+	    which-key-sort-order #'which-key-key-order-alpha
+	    which-key-sort-uppercase-first nil
+	    which-key-add-column-padding 1
+	    which-key-max-display-columns nil
+	    which-key-min-display-lines 6
+	    which-key-side-window-slot -10
+	    which-key-side-window-max-height 0.25
+	    which-key-idle-delay 0.3
+	    which-key-max-description-length 25
+	    which-key-allow-imprecise-window-fit t
+	    which-key-separator " → " ))
+#+end_src
+
+*** Leader Bindings (general.el)
+#+begin_src emacs-lisp
+  (setup (:straight general)
+    (general-evil-setup t)
+
+    (general-create-definer leader-key-def
+      :keymaps '(normal insert visual emacs)
+      :prefix "SPC"
+      :global-prefix "M-SPC"))
+#+end_src
+*** Hydra
+#+begin_src emacs-lisp
+  (setup (:straight hydra)
+    (require 'hydra))
+#+end_src
+** Emacs
+#+begin_src emacs-lisp
+  (leader-key-def
+    "."      '(execute-extended-command :which-key "Commands(M-x)")
+    "SPC"    '(:ignore t :which-key "emacs")
+    "SPC c"  '(compile :which-key "Compile")
+    "SPC C"  '(recompile :which-key "Recompile")
+    "SPC r"  '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :which-key "Reload emacs config"))
+#+end_src
+
+** COMMENT Window
+#+begin_src emacs-lisp
+  (define-key evil-normal-state-map (kbd "M-l") 'windmove-right)
+  (define-key evil-normal-state-map (kbd "M-h") 'windmove-left)
+  (define-key evil-normal-state-map (kbd "M-j") 'windmove-down)
+  (define-key evil-normal-state-map (kbd "M-k") 'windmove-up)
+
+  (leader-key-def
+    ;; Window splits
+	 "w"     '(:ignore t :which-key "window")
+	 "w c"   '(evil-window-delete :which-key "Close window")
+	 "w n"   '(evil-window-new :which-key "New window")
+	 "w s"   '(evil-window-split :which-key "Horizontal split window")
+	 "w v"   '(evil-window-vsplit :which-key "Vertical split window")
+	 ;; Window motions
+	 "w h"   '(evil-window-left :which-key "Window left")
+	 "w j"   '(evil-window-down :which-key "Window down")
+	 "w k"   '(evil-window-up :which-key "Window up")
+	 "w l"   '(evil-window-right :which-key "Window right"))
+#+end_src
+
+** COMMENT Projectile
+#+begin_src emacs-lisp
+  (leader-key-def
+    "p"   '(:ignore t :which-key "projectile")
+    "pf"  'projectile-find-file
+    "ps"  'projectile-switch-project
+    "pF"  'consult-ripgrep
+    "pc"  'projectile-compile-project
+    "pd"  'projectile-dired)
+#+end_src
+** COMMENT Files
+#+begin_src emacs-lisp
+  (leader-key-def "e" '(neotree-toggle :which-key "neotree"))
+  (leader-key-def
+    "f"   '(:ignore t :which-key "files")
+    "ff"  '(find-file :which-key "open file")
+    "fr"  '(consult-recent-file :which-key "recent files")
+    "fR"  '(revert-buffer :which-key "revert file")
+    "fj"  '(counsel-file-jump :which-key "jump to file"))
+#+end_src
+** COMMENT Buffers
+#+begin_src emacs-lisp
+  (leader-key-def
+    "b"     '(:ignore t :which-key "buffers")
+    "b c"   '(clone-indirect-buffer-other-window :which-key "Clone indirect buffer other window")
+    "b b"   '(switch-to-buffer :which-key "list buffer")
+    "b B"   '(ibuffer-list-buffers :which-key "Ibuffer list buffers")
+    "b n"   '(next-buffer :which-key "Next buffer")
+    "b p"   '(previous-buffer :which-key "Previous buffer")
+    "b k"   '(kill-current-buffer :which-key "Kill current buffer")
+    "b K"   '(kill-buffer :which-key "Kill buffer"))
+#+end_src
+** COMMENT Comment
+#+begin_src emacs-lisp
+(leader-key-def
+      "/"  '(evilnc-comment-or-uncomment-lines :which-key "toggle comment"))
+#+end_src
+** COMMENT Lsp
+#+begin_src emacs-lisp
+  (leader-key-def
+       "l" '(:ignore t :which-key "lsp")
+       "ld" 'xref-find-definitions
+       "lr" 'xref-find-references
+       "ln" 'lsp-ui-find-next-reference
+       "lp" 'lsp-ui-find-prev-reference
+       "ls" 'consult-imenu
+       "le" 'lsp-ui-flycheck-list
+       "lS" 'lsp-ui-sideline-mode
+       "lX" 'lsp-execute-code-action)
+#+end_src
+** COMMENT Orther
+#+begin_src emacs-lisp
+  (defhydra hydra-text-scale (:timeout 3)
+    "scale text"
+    ("j" text-scale-increase "in")
+    ("k" text-scale-decrease "out")
+    ("f" nil "finished" :exit t))
+
+  (leader-key-def
+    "t"  '(:ignore t :which-key "toggles")
+    "tw" 'whitespace-mode
+    "ts" '(hydra-text-scale/body :which-key "scale text")
+    "tt" '(consul-theme :which-key "choose theme"))
 #+end_src
